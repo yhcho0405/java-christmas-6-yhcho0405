@@ -1,11 +1,12 @@
 package christmas.controller;
 
+import christmas.domain.Order;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 
-public class PromotionController {
-    public PromotionController() {
-
+public class EventController {
+    public EventController() {
+        Order order = new Order();
     }
 
     public void start() {
@@ -24,7 +25,8 @@ public class PromotionController {
     }
 
     private void askExpectedVisitDate() {
-        InputView.readDate();
+        int expectedVisitDate = InputView.readExpectedVisitDate();
+        
     }
 
     private void askMenuOrder() {

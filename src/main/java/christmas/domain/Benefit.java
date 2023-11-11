@@ -1,4 +1,4 @@
 package christmas.domain;
 
-public class Discount {
+public class Benefit {
 }

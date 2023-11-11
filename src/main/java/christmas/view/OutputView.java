@@ -7,6 +7,10 @@ public class OutputView {
     private OutputView() {
     }
 
+    public static void printErrorMessage(String errorMessage) {
+        System.out.println(errorMessage);
+    }
+
     public static void printInformation() {
         System.out.println(INFORMATION_MESSAGE);
         // ...
