@@ -61,16 +61,16 @@ public enum Calendar {
         throw new IllegalArgumentException("[ERROR]");
     }
 
+    public int getDay() {
+        return this.day;
+    }
+
     public boolean isWeekend() {
         return dayType == DayType.WEEKEND;
     }
 
     public boolean isSpecialDiscountDay() {
         return isSpecialDiscountDay;
-    }
-
-    public int daysUntilChristmas() {
-        return 25 - this.day;
     }
 
     private enum DayType {

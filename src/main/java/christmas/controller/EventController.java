@@ -1,12 +1,15 @@
 package christmas.controller;
 
-import christmas.domain.Order;
+import christmas.service.OrderService;
 import christmas.view.InputView;
 import christmas.view.OutputView;
+import java.util.function.Supplier;
 
 public class EventController {
+    private final OrderService orderService;
+
     public EventController() {
-        Order order = new Order();
+        orderService = new OrderService();
     }
 
     public void start() {
@@ -25,13 +28,35 @@ public class EventController {
     }
 
     private void askExpectedVisitDate() {
-        int expectedVisitDate = InputView.readExpectedVisitDate();
-        
+        OutputView.printAskExpectedVisitDate();
+
+        errorHandler(() -> {
+            String ExpectedVisitDate = InputView.readLine();
+            orderService.setVisitDate(ExpectedVisitDate);
+            return null;
+        });
     }
 
     private void askMenuOrder() {
+        OutputView.printAskExpectedVisitDate();
+
+        errorHandler(() -> {
+            String ExpectedVisitDate = InputView.readLine();
+            orderService.setVisitDate(ExpectedVisitDate);
+            return null;
+        });
     }
 
     private void printResult() {
+    }
+
+    private <T> T errorHandler(Supplier<T> supplier) {
+        while (true) {
+            try {
+                return supplier.get();
+            } catch (IllegalArgumentException e) {
+                OutputView.printErrorMessage(e.getMessage());
+            }
+        }
     }
 }
