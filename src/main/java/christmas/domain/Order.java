@@ -1,15 +1,19 @@
 package christmas.domain;
 
+import christmas.domain.constants.Calendar;
+import christmas.domain.constants.MenuBoard;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Order {
     private Calendar visitDate;
     private Benefit benefit;
-    private final Map<MenuBoard, Integer> orders;
+    private final Menu menus;
 
     public Order() {
-        this.orders = new HashMap<>();
+        menus = new Menu();
     }
 
     public void setVisitDate(String expectedVisitDate) {
@@ -20,6 +24,7 @@ public class Order {
     public void setMenuOrder(String menuOrder) {
         validateMenuOrder(menuOrder);
 
+        Map<MenuBoard, Integer> orders = new HashMap<>();
         String[] menuOrders = menuOrder.split(",");
         for (String order : menuOrders) {
             String[] parts = order.split("-");
@@ -29,10 +34,11 @@ public class Order {
             MenuBoard menu = MenuBoard.getByName(menuName);
             orders.put(menu, orders.getOrDefault(menu, 0) + quantity);
         }
+        menus.setMenuOrder(orders);
     }
 
     public void calculateResult() {
-        benefit = new Benefit(visitDate, orders);
+        benefit = new Benefit(visitDate, menus);
         benefit.calculateBenefit();
     }
 
@@ -53,13 +59,17 @@ public class Order {
             throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
         }
 
+        Set<String> menuNames = new HashSet<>();
         String[] menuOrders = menuOrder.split(",");
         for (String order : menuOrders) {
-            validateIndividualOrder(order.trim());
+            String menuName = validateIndividualOrder(order.trim());
+            if (!menuNames.add(menuName)) {
+                throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+            }
         }
     }
 
-    private void validateIndividualOrder(String order) {
+    private String validateIndividualOrder(String order) {
         String[] parts = order.split("-");
 
         if (parts.length != 2) {
@@ -71,6 +81,8 @@ public class Order {
 
         validateMenuName(menuName);
         validateMenuQuantity(quantity);
+
+        return menuName;
     }
 
     private void validateMenuName(String menuName) {

@@ -1,4 +1,4 @@
-package christmas.domain;
+package christmas.domain.constants;
 
 public enum MenuBoard {
     MUSHROOM_SOUP("양송이수프", 6_000, Category.APPETIZER),
