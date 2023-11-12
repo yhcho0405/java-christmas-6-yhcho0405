@@ -1,19 +1,40 @@
 package christmas.domain;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Order {
     private Calendar visitDate;
     private Benefit benefit;
+    private final Map<MenuBoard, Integer> orders;
 
     public Order() {
-        this.benefit = new Benefit();
+        this.orders = new HashMap<>();
     }
 
     public void setVisitDate(String expectedVisitDate) {
         validateExpectedVisitDate(expectedVisitDate);
         this.visitDate = Calendar.getByDay(Integer.parseInt(expectedVisitDate));
-        benefit.setDiscount(this.visitDate);
     }
 
+    public void setMenuOrder(String menuOrder) {
+        validateMenuOrder(menuOrder);
+
+        String[] menuOrders = menuOrder.split(",");
+        for (String order : menuOrders) {
+            String[] parts = order.split("-");
+            String menuName = parts[0].trim();
+            int quantity = Integer.parseInt(parts[1].trim());
+
+            MenuBoard menu = MenuBoard.getByName(menuName);
+            orders.put(menu, orders.getOrDefault(menu, 0) + quantity);
+        }
+    }
+
+    public void calculateResult() {
+        benefit = new Benefit(visitDate, orders);
+        benefit.calculateBenefit();
+    }
 
     private void validateExpectedVisitDate(String input) {
         try {
@@ -24,6 +45,49 @@ public class Order {
             }
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
+        }
+    }
+
+    private void validateMenuOrder(String menuOrder) {
+        if (menuOrder == null || menuOrder.trim().isEmpty()) {
+            throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        }
+
+        String[] menuOrders = menuOrder.split(",");
+        for (String order : menuOrders) {
+            validateIndividualOrder(order.trim());
+        }
+    }
+
+    private void validateIndividualOrder(String order) {
+        String[] parts = order.split("-");
+
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        }
+
+        String menuName = parts[0].trim();
+        String quantity = parts[1].trim();
+
+        validateMenuName(menuName);
+        validateMenuQuantity(quantity);
+    }
+
+    private void validateMenuName(String menuName) {
+        try {
+            MenuBoard.getByName(menuName);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        }
+    }
+
+    private void validateMenuQuantity(String quantity) {
+        try {
+            if (Integer.parseInt(quantity) < 1) {
+                throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
         }
     }
 }

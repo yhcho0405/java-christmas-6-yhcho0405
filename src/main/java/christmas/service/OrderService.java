@@ -13,4 +13,11 @@ public class OrderService {
         order.setVisitDate(expectedVisitDate);
     }
 
+    public void setMenuOrder(String menuOrder) {
+        order.setMenuOrder(menuOrder);
+    }
+
+    public void calculateResult() {
+        order.calculateResult();
+    }
 }

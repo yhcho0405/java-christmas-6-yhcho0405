@@ -31,23 +31,24 @@ public class EventController {
         OutputView.printAskExpectedVisitDate();
 
         errorHandler(() -> {
-            String ExpectedVisitDate = InputView.readLine();
-            orderService.setVisitDate(ExpectedVisitDate);
+            String expectedVisitDate = InputView.readLine();
+            orderService.setVisitDate(expectedVisitDate);
             return null;
         });
     }
 
     private void askMenuOrder() {
-        OutputView.printAskExpectedVisitDate();
+        OutputView.printAskMenuOrder();
 
         errorHandler(() -> {
-            String ExpectedVisitDate = InputView.readLine();
-            orderService.setVisitDate(ExpectedVisitDate);
+            String menuOrder = InputView.readLine();
+            orderService.setMenuOrder(menuOrder);
             return null;
         });
     }
 
     private void printResult() {
+        orderService.calculateResult();
     }
 
     private <T> T errorHandler(Supplier<T> supplier) {
