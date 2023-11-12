@@ -7,12 +7,15 @@ public class Benefit {
     private static final int WEEKDAY_DISCOUNT_PER_ITEM = 2_023;
     private static final int WEEKEND_DISCOUNT_PER_ITEM = 2_023;
 
+    private final Calendar visitDate;
+    private final Menu menus;
+
     private int dDayDiscount = 0;
     private int weekdayDiscount = 0;
     private int weekendDiscount = 0;
     private int specialDiscount = 0;
-    private final Calendar visitDate;
-    private final Menu menus;
+    private Boolean giftEvent = false;
+    private Badge badge;
 
     public Benefit(Calendar visitDate, Menu menus) {
         this.visitDate = visitDate;
@@ -27,6 +30,14 @@ public class Benefit {
         if (menus.calculateTotalOrderAmount() < 10000) {
             resetDiscount();
         }
+        if (menus.calculateTotalOrderAmount() >= 120000) {
+            giftEvent = true;
+        }
+        setBadge();
+    }
+
+    private void setBadge() {
+
     }
 
     private void resetDiscount() {
@@ -34,6 +45,7 @@ public class Benefit {
         weekdayDiscount = 0;
         weekendDiscount = 0;
         specialDiscount = 0;
+        giftEvent = false;
     }
 
     private void calculateDDayDiscount() {
