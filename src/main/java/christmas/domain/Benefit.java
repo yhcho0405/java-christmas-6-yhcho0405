@@ -1,5 +1,6 @@
 package christmas.domain;
 
+import christmas.domain.constants.Badge;
 import christmas.domain.constants.Calendar;
 import christmas.domain.constants.MenuBoard;
 
@@ -14,8 +15,8 @@ public class Benefit {
     private int weekdayDiscount = 0;
     private int weekendDiscount = 0;
     private int specialDiscount = 0;
+    private Badge badge = null;
     private Boolean giftEvent = false;
-    private Badge badge;
 
     public Benefit(Calendar visitDate, Menu menus) {
         this.visitDate = visitDate;
@@ -33,11 +34,15 @@ public class Benefit {
         if (menus.calculateTotalOrderAmount() >= 120000) {
             giftEvent = true;
         }
-        setBadge();
+        badge = Badge.getBadgeByAmount(getTotalBenefitAmount());
     }
 
-    private void setBadge() {
-
+    private int getTotalBenefitAmount() {
+        int totalBenefitAmount = dDayDiscount + weekdayDiscount + weekendDiscount + specialDiscount;
+        if (giftEvent) {
+            totalBenefitAmount += MenuBoard.CHAMPAGNE.getPrice();
+        }
+        return totalBenefitAmount;
     }
 
     private void resetDiscount() {
