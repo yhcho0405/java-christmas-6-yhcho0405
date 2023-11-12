@@ -37,6 +37,10 @@ public class Menu {
         return totalAmount;
     }
 
+    public Map<MenuBoard, Integer> getOrders() {
+        return orders;
+    }
+
     private void validateOrders(Map<MenuBoard, Integer> orders) {
         if (orders.isEmpty()) {
             throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");

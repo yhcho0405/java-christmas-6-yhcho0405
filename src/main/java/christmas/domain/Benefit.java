@@ -37,12 +37,40 @@ public class Benefit {
         badge = Badge.getBadgeByAmount(getTotalBenefitAmount());
     }
 
-    private int getTotalBenefitAmount() {
+    public int getDDayDiscount() {
+        return dDayDiscount;
+    }
+
+    public int getWeekdayDiscount() {
+        return weekdayDiscount;
+    }
+
+    public int getWeekendDiscount() {
+        return weekendDiscount;
+    }
+
+    public int getSpecialDiscount() {
+        return specialDiscount;
+    }
+
+    public boolean isGiftEvent() {
+        return giftEvent;
+    }
+
+    public Badge getBadge() {
+        return badge;
+    }
+
+    public int getTotalBenefitAmount() {
         int totalBenefitAmount = dDayDiscount + weekdayDiscount + weekendDiscount + specialDiscount;
         if (giftEvent) {
             totalBenefitAmount += MenuBoard.CHAMPAGNE.getPrice();
         }
         return totalBenefitAmount;
+    }
+
+    public int getTotalDiscount() {
+        return dDayDiscount + weekdayDiscount + weekendDiscount + specialDiscount;
     }
 
     private void resetDiscount() {

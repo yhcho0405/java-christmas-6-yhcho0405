@@ -1,7 +1,5 @@
-package christmas.service;
+package christmas.domain;
 
-import christmas.domain.Benefit;
-import christmas.domain.Menu;
 import christmas.domain.constants.Calendar;
 import christmas.domain.constants.MenuBoard;
 import java.util.HashMap;
@@ -9,12 +7,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class OrderService {
+public class Order {
     private Calendar visitDate;
     private Benefit benefit;
     private final Menu menus;
 
-    public OrderService() {
+    public Order() {
         menus = new Menu();
     }
 
@@ -39,10 +37,23 @@ public class OrderService {
         menus.setMenuOrder(orders);
     }
 
-    public void calculateResult() {
+    public void calculateBenefit() {
         benefit = new Benefit(visitDate, menus);
         benefit.calculateBenefit();
     }
+
+    public Calendar getVisitDate() {
+        return visitDate;
+    }
+
+    public Benefit getBenefit() {
+        return benefit;
+    }
+
+    public Menu getMenus() {
+        return menus;
+    }
+
 
     private void validateExpectedVisitDate(String input) {
         try {

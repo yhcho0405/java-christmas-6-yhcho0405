@@ -1,15 +1,15 @@
 package christmas.controller;
 
-import christmas.service.OrderService;
+import christmas.domain.Order;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 import java.util.function.Supplier;
 
 public class EventController {
-    private final OrderService orderService;
+    private final Order order;
 
     public EventController() {
-        orderService = new OrderService();
+        order = new Order();
     }
 
     public void start() {
@@ -32,7 +32,7 @@ public class EventController {
 
         errorHandler(() -> {
             String expectedVisitDate = InputView.readLine();
-            orderService.setVisitDate(expectedVisitDate);
+            order.setVisitDate(expectedVisitDate);
             return null;
         });
     }
@@ -42,13 +42,14 @@ public class EventController {
 
         errorHandler(() -> {
             String menuOrder = InputView.readLine();
-            orderService.setMenuOrder(menuOrder);
+            order.setMenuOrder(menuOrder);
             return null;
         });
     }
 
     private void printResult() {
-        orderService.calculateResult();
+        order.calculateBenefit();
+        OutputView.printResult(order.getVisitDate(), order.getMenus(), order.getBenefit());
     }
 
     private <T> T errorHandler(Supplier<T> supplier) {
