@@ -18,9 +18,41 @@ class InputTest extends NsTest {
     }
 
     @Test
-    void 유효하지_않은_날짜_입력() {
+    void 유효하지_않은_날짜_입력_1() {
         assertSimpleTest(() -> {
             runException("32");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 유효하지_않은_날짜_입력_2() {
+        assertSimpleTest(() -> {
+            runException("30.1");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 유효하지_않은_날짜_입력_3() {
+        assertSimpleTest(() -> {
+            runException("-1");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 유효하지_않은_날짜_입력_4() {
+        assertSimpleTest(() -> {
+            runException("hello");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 유효하지_않은_날짜_입력_5() {
+        assertSimpleTest(() -> {
+            runException("\n");
             assertThat(output()).contains("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
         });
     }
@@ -34,7 +66,7 @@ class InputTest extends NsTest {
     }
 
     @Test
-    void 메뉴판에_없는_메뉴_입력() {
+    void 메뉴판에_없는_메뉴_입력_1() {
         assertSimpleTest(() -> {
             runException("3", "피자-1");
             assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
@@ -42,7 +74,31 @@ class InputTest extends NsTest {
     }
 
     @Test
-    void 부적절한_수량_입력() {
+    void 메뉴판에_없는_메뉴_입력_2() {
+        assertSimpleTest(() -> {
+            runException("3", "\n");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 메뉴판에_없는_메뉴_입력_3() {
+        assertSimpleTest(() -> {
+            runException("3", "-");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 메뉴판에_없는_메뉴_입력_4() {
+        assertSimpleTest(() -> {
+            runException("3", "1-피자");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 부적절한_수량_입력_1() {
         assertSimpleTest(() -> {
             runException("3", "티본스테이크-0,바비큐립-1");
             assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
@@ -50,9 +106,50 @@ class InputTest extends NsTest {
     }
 
     @Test
-    void 잘못된_형식_입력() {
+    void 부적절한_수량_입력_2() {
+        assertSimpleTest(() -> {
+            runException("3", "티본스테이크--1,바비큐립-1");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 부적절한_수량_입력_3() {
+        assertSimpleTest(() -> {
+            runException("3", "티본스테이크-1.1,바비큐립-1");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 부적절한_수량_입력_4() {
+        assertSimpleTest(() -> {
+            runException("3", "티본스테이크-asdf,바비큐립-1");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        });
+    }
+
+
+    @Test
+    void 잘못된_형식_입력_1() {
         assertSimpleTest(() -> {
             runException("3", "티본스테이크/1,바비큐립 1");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 잘못된_형식_입력_2() {
+        assertSimpleTest(() -> {
+            runException("3", "티본 스테이크 - 1");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 잘못된_형식_입력_3() {
+        assertSimpleTest(() -> {
+            runException("3", "티본스테이크 -- 1");
             assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
         });
     }
