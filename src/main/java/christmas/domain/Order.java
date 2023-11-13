@@ -16,8 +16,10 @@ public class Order {
     }
 
     public void setVisitDate(String expectedVisitDate) {
-        Validator.validateExpectedVisitDate(expectedVisitDate);
-        this.visitDate = Calendar.getByDay(Integer.parseInt(expectedVisitDate));
+        Validator.validateExpectedVisitDate(expectedVisitDate.trim());
+        this.visitDate = Calendar.getByDay(
+                Integer.parseInt(expectedVisitDate.trim())
+        );
     }
 
     public void setMenuOrder(String menuOrder) {
