@@ -5,35 +5,10 @@ import christmas.domain.Menu;
 import christmas.domain.constants.Badge;
 import christmas.domain.constants.Calendar;
 import christmas.domain.constants.MenuBoard;
+import christmas.view.constants.Message;
 import java.util.Map;
 
 public class OutputView {
-    private static final String INFORMATION_MESSAGE = "안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.";
-    private static final String EXPECTED_VISIT_DATE_ASK_MESSAGE = "12월 중 식당 예상 방문 날짜는 언제인가요? (숫자만 입력해 주세요!)";
-    private static final String MENU_ORDER_ASK_MESSAGE = "주문하실 메뉴를 메뉴와 개수를 알려 주세요. (e.g. 해산물파스타-2,레드와인-1,초코케이크-1)";
-    private static final String RESULT_MESSAGE = "12월 %d일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!\n"
-            + "\n"
-            + "<주문 메뉴>\n"
-            + "%s"
-            + "\n"
-            + "<할인 전 총주문 금액>\n"
-            + "%s원\n"
-            + "\n"
-            + "<증정 메뉴>\n"
-            + "%s\n"
-            + "\n"
-            + "<혜택 내역>\n"
-            + "%s"
-            + "\n"
-            + "<총혜택 금액>\n"
-            + "%s원\n"
-            + "\n"
-            + "<할인 후 예상 결제 금액>\n"
-            + "%s원\n"
-            + "\n"
-            + "<12월 이벤트 배지>\n"
-            + "%s";
-
     private OutputView() {
     }
 
@@ -42,27 +17,27 @@ public class OutputView {
     }
 
     public static void printInformation() {
-        System.out.println(INFORMATION_MESSAGE);
+        System.out.println(Message.INFORMATION.getMessage());
     }
 
     public static void printAskExpectedVisitDate() {
-        System.out.println(EXPECTED_VISIT_DATE_ASK_MESSAGE);
+        System.out.println(Message.REQUEST_EXPECTED_VISIT_DATE.getMessage());
     }
 
     public static void printAskMenuOrder() {
-        System.out.println(MENU_ORDER_ASK_MESSAGE);
+        System.out.println(Message.REQUEST_MENU_ORDER.getMessage());
     }
 
-    // 날짜, 주문 메뉴, 총 주문 금액, 증정 메뉴, 혜택 내역, 총 혜택 금액, 예상 결제 금액, 이벤트 배지
     public static void printResult(Calendar visitDate, Menu menus, Benefit benefit) {
-        System.out.printf(RESULT_MESSAGE,
+        System.out.printf(Message.RESULT.getMessage(),
                 visitDate.getDay(),
                 createMenuOrderMessage(menus),
-                String.format("%,d", menus.calculateTotalOrderAmount()),
+                String.format(Message.NUMBER_FORMAT.getMessage(), menus.calculateTotalOrderAmount()),
                 createGiftMenuMessage(benefit),
                 createBenefitSummaryMessage(benefit),
-                String.format("%,d", -benefit.getTotalBenefitAmount()),
-                String.format("%,d", menus.calculateTotalOrderAmount() - benefit.getTotalDiscount()),
+                String.format(Message.NUMBER_FORMAT.getMessage(), -benefit.getTotalBenefitAmount()),
+                String.format(Message.NUMBER_FORMAT.getMessage(),
+                        menus.calculateTotalOrderAmount() - benefit.getTotalDiscount()),
                 createBadgeMessage(benefit.getBadge())
         );
     }
@@ -73,51 +48,52 @@ public class OutputView {
 
         for (Map.Entry<MenuBoard, Integer> orderEntry : orders.entrySet()) {
             MenuBoard menuBoard = orderEntry.getKey();
-            Integer quantity = orderEntry.getValue();
-
+            int quantity = orderEntry.getValue();
             menuOrderString.append(menuBoard.getName())
-                    .append(" ")
+                    .append(Message.SPACE.getMessage())
                     .append(quantity)
-                    .append("개\n");
+                    .append(Message.ITEM_QUANTITY.getMessage())
+                    .append(Message.NEW_LINE.getMessage());
         }
-
         return menuOrderString.toString();
     }
 
     private static String createGiftMenuMessage(Benefit benefit) {
         if (benefit.isGiftEvent()) {
-            return "샴페인 1개";
+            return Message.GIFT.getMessage();
         } else {
-            return "없음";
+            return Message.NO_ITEM.getMessage();
         }
     }
 
-    public static String createBenefitSummaryMessage(Benefit benefit) {
+    private static String createBenefitSummaryMessage(Benefit benefit) {
         StringBuilder summary = new StringBuilder();
-
-        addDiscountLine(summary, "크리스마스 디데이 할인: -", benefit.getDDayDiscount());
-        addDiscountLine(summary, "평일 할인: -", benefit.getWeekdayDiscount());
-        addDiscountLine(summary, "주말 할인: -", benefit.getWeekendDiscount());
-        addDiscountLine(summary, "특별 할인: -", benefit.getSpecialDiscount());
+        addDiscountLine(summary, Message.D_DAY_DISCOUNT_LABEL.getMessage(), benefit.getDDayDiscount());
+        addDiscountLine(summary, Message.WEEKDAY_DISCOUNT_LABEL.getMessage(), benefit.getWeekdayDiscount());
+        addDiscountLine(summary, Message.WEEKEND_DISCOUNT_LABEL.getMessage(), benefit.getWeekendDiscount());
+        addDiscountLine(summary, Message.SPECIAL_DISCOUNT_LABEL.getMessage(), benefit.getSpecialDiscount());
 
         if (benefit.isGiftEvent()) {
-            addDiscountLine(summary, "증정 이벤트: -", MenuBoard.CHAMPAGNE.getPrice());
+            addDiscountLine(summary, Message.GIFT_EVENT_LABEL.getMessage(), MenuBoard.CHAMPAGNE.getPrice());
         }
-
-        return !summary.isEmpty() ? summary.toString() : "없음\n";
+        if (!summary.isEmpty()) {
+            return summary.toString();
+        }
+        return Message.NO_ITEM.getMessage() + Message.NEW_LINE.getMessage();
     }
 
     private static void addDiscountLine(StringBuilder summary, String label, int amount) {
         if (amount > 0) {
             summary.append(label)
-                    .append(String.format("%,d", amount))
-                    .append("원\n");
+                    .append(String.format(Message.NUMBER_FORMAT.getMessage(), amount))
+                    .append(Message.WON.getMessage())
+                    .append(Message.NEW_LINE.getMessage());
         }
     }
 
     private static String createBadgeMessage(Badge badge) {
         if (badge == null) {
-            return "없음";
+            return Message.NO_ITEM.getMessage();
         }
         return badge.getName();
     }
