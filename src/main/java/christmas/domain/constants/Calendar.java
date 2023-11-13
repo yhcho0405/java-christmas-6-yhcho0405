@@ -1,6 +1,5 @@
 package christmas.domain.constants;
 
-import christmas.domain.util.ErrorMessage;
 import java.util.Set;
 
 public enum Calendar {

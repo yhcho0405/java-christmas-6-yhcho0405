@@ -1,5 +1,6 @@
 package christmas.domain.util;
 
+import christmas.domain.constants.ErrorMessage;
 import christmas.domain.constants.MenuBoard;
 import java.util.HashSet;
 import java.util.Map;

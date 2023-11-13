@@ -1,7 +1,5 @@
 package christmas.domain.constants;
 
-import christmas.domain.util.ErrorMessage;
-
 public enum MenuBoard {
     MUSHROOM_SOUP("양송이수프", 6_000, Category.APPETIZER),
     TAPAS("타파스", 5_500, Category.APPETIZER),
