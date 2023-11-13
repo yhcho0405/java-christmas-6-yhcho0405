@@ -1,5 +1,6 @@
 package christmas.domain.constants;
 
+import christmas.domain.util.ErrorMessage;
 import java.util.Set;
 
 public enum Calendar {
@@ -58,7 +59,7 @@ public enum Calendar {
                 return calendar;
             }
         }
-        throw new IllegalArgumentException("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
+        throw new IllegalArgumentException(ErrorMessage.INVALID_DATE.getMessage());
     }
 
     public int getDay() {

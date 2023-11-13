@@ -1,5 +1,7 @@
 package christmas.domain.constants;
 
+import christmas.domain.util.ErrorMessage;
+
 public enum MenuBoard {
     MUSHROOM_SOUP("양송이수프", 6_000, Category.APPETIZER),
     TAPAS("타파스", 5_500, Category.APPETIZER),
@@ -42,7 +44,7 @@ public enum MenuBoard {
                 return menu;
             }
         }
-        throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
     }
 
     public enum Category {
