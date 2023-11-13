@@ -7,6 +7,7 @@ import camp.nextstep.edu.missionutils.test.NsTest;
 import org.junit.jupiter.api.Test;
 
 class InputTest extends NsTest {
+    private static final String LINE_SEPARATOR = System.lineSeparator();
 
     @Test
     void 유효한_날짜_입력() {
@@ -77,6 +78,63 @@ class InputTest extends NsTest {
         assertSimpleTest(() -> {
             runException("3", "제로콜라-3,레드와인-2");
             assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 크리스마스_디데이_할인_적용() {
+        assertSimpleTest(() -> {
+            run("3", "티본스테이크-1");
+            assertThat(output()).contains("크리스마스 디데이 할인: -1,200원");
+        });
+    }
+
+    @Test
+    void 평일_및_주말_할인_적용() {
+        assertSimpleTest(() -> {
+            run("4", "초코케이크-2");
+            assertThat(output()).contains("평일 할인: -4,046원");
+            run("8", "티본스테이크-1");
+            assertThat(output()).contains("주말 할인: -2,023원");
+        });
+    }
+
+    @Test
+    void 특별_할인_적용() {
+        assertSimpleTest(() -> {
+            run("3", "티본스테이크-1");
+            assertThat(output()).contains("특별 할인: -1,000원");
+        });
+    }
+
+    @Test
+    void 증정_이벤트_적용() {
+        assertSimpleTest(() -> {
+            run("3", "티본스테이크-3");
+            assertThat(output()).contains("증정 이벤트: -25,000원");
+        });
+    }
+
+    @Test
+    void 배지_부여() {
+        assertSimpleTest(() -> {
+            run("3", "티본스테이크-3");
+            assertThat(output()).contains("<12월 이벤트 배지>" + LINE_SEPARATOR + "산타");
+        });
+
+        assertSimpleTest(() -> {
+            run("26", "타파스-1,제로콜라-1");
+            assertThat(output()).contains("<12월 이벤트 배지>" + LINE_SEPARATOR + "없음");
+        });
+
+        assertSimpleTest(() -> {
+            run("4", "초코케이크-3");
+            assertThat(output()).contains("<12월 이벤트 배지>" + LINE_SEPARATOR + "별");
+        });
+
+        assertSimpleTest(() -> {
+            run("4", "초코케이크-7");
+            assertThat(output()).contains("<12월 이벤트 배지>" + LINE_SEPARATOR + "트리");
         });
     }
 
