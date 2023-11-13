@@ -138,6 +138,54 @@ class InputTest extends NsTest {
         });
     }
 
+    @Test
+    void 주문_내역_출력() {
+        assertSimpleTest(() -> {
+            run("3", "티본스테이크-1,바비큐립-2");
+            assertThat(output()).contains("티본스테이크 1개", "바비큐립 2개");
+        });
+    }
+
+    @Test
+    void 할인_내역_출력() {
+        assertSimpleTest(() -> {
+            run("3", "티본스테이크-1");
+            assertThat(output()).contains("크리스마스 디데이 할인: -1,200원");
+        });
+    }
+
+    @Test
+    void 총혜택_금액_출력() {
+        assertSimpleTest(() -> {
+            run("25", "양송이수프-1,타파스-1,시저샐러드-1,티본스테이크-1,바비큐립-1,해산물파스타-1,크리스마스파스타-1,초코케이크-1,아이스크림-1,제로콜라-1,레드와인-1,샴페인-1");
+            assertThat(output()).contains("<총혜택 금액>" + LINE_SEPARATOR + "-33,446원");
+        });
+    }
+
+    @Test
+    void 할인_후_예상_결제_금액_출력() {
+        assertSimpleTest(() -> {
+            run("25", "양송이수프-1,타파스-1,시저샐러드-1,티본스테이크-1,바비큐립-1,해산물파스타-1,크리스마스파스타-1,초코케이크-1,아이스크림-1,제로콜라-1,레드와인-1,샴페인-1");
+            assertThat(output()).contains("<할인 후 예상 결제 금액>" + LINE_SEPARATOR + "288,054원");
+        });
+    }
+
+    @Test
+    void 이벤트_배지_출력() {
+        assertSimpleTest(() -> {
+            run("3", "티본스테이크-1,바비큐립-2");
+            assertThat(output()).containsPattern("<12월 이벤트 배지>\\n(없음|별|트리|산타)");
+        });
+    }
+
+    @Test
+    void 혜택_없음_시_출력() {
+        assertSimpleTest(() -> {
+            run("26", "타파스-1,제로콜라-1");
+            assertThat(output()).contains("<혜택 내역>" + LINE_SEPARATOR + "없음");
+        });
+    }
+
     @Override
     protected void runMain() {
         Application.main(new String[]{});
