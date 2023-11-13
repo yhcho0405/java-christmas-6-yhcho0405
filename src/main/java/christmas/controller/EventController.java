@@ -3,7 +3,6 @@ package christmas.controller;
 import christmas.domain.Order;
 import christmas.view.InputView;
 import christmas.view.OutputView;
-import java.util.function.Supplier;
 
 public class EventController {
     private final Order order;
@@ -29,7 +28,6 @@ public class EventController {
         errorHandler(() -> {
             String expectedVisitDate = InputView.readLine();
             order.setVisitDate(expectedVisitDate);
-            return null;
         });
     }
 
@@ -39,7 +37,6 @@ public class EventController {
         errorHandler(() -> {
             String menuOrder = InputView.readLine();
             order.setMenuOrder(menuOrder);
-            return null;
         });
     }
 
@@ -48,10 +45,10 @@ public class EventController {
         OutputView.printResult(order.getVisitDate(), order.getMenus(), order.getBenefit());
     }
 
-    private <T> void errorHandler(Supplier<T> supplier) {
+    private void errorHandler(Runnable runnable) {
         while (true) {
             try {
-                supplier.get();
+                runnable.run();
                 return;
             } catch (IllegalArgumentException e) {
                 OutputView.printErrorMessage(e.getMessage());
