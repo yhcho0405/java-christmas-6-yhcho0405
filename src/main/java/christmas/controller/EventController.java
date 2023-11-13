@@ -48,10 +48,11 @@ public class EventController {
         OutputView.printResult(order.getVisitDate(), order.getMenus(), order.getBenefit());
     }
 
-    private <T> T errorHandler(Supplier<T> supplier) {
+    private <T> void errorHandler(Supplier<T> supplier) {
         while (true) {
             try {
-                return supplier.get();
+                supplier.get();
+                return;
             } catch (IllegalArgumentException e) {
                 OutputView.printErrorMessage(e.getMessage());
             }

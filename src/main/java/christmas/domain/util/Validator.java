@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class Validator {
+    private static final int MIN_DATE = 1;
+    private static final int MIN_MENU_QUANTITY = 1;
+    private static final int MAX_TOTAL_ORDER_QUANTITY = 20;
+
     private Validator() {
     }
 
@@ -14,7 +18,7 @@ public class Validator {
         try {
             int date = Integer.parseInt(input);
 
-            if (date <= 0) {
+            if (date < MIN_DATE) {
                 throw new IllegalArgumentException(ErrorMessage.INVALID_DATE.getMessage());
             }
         } catch (NumberFormatException e) {
@@ -63,7 +67,7 @@ public class Validator {
 
     public static void validateMenuQuantity(String quantity) {
         try {
-            if (Integer.parseInt(quantity) < 1) {
+            if (Integer.parseInt(quantity) < MIN_MENU_QUANTITY) {
                 throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
             }
         } catch (NumberFormatException e) {
@@ -89,7 +93,7 @@ public class Validator {
             totalQuantity += quantity;
         }
 
-        if (totalQuantity > 20) {
+        if (totalQuantity > MAX_TOTAL_ORDER_QUANTITY) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
         }
     }
