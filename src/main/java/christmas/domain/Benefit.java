@@ -7,14 +7,21 @@ import christmas.domain.constants.MenuBoard;
 public class Benefit {
     private static final int WEEKDAY_DISCOUNT_PER_ITEM = 2_023;
     private static final int WEEKEND_DISCOUNT_PER_ITEM = 2_023;
+    private static final int D_DAY_DISCOUNT_START = 1_000;
+    private static final int D_DAY_DISCOUNT_INCREMENT = 100;
+    private static final int SPECIAL_DISCOUNT = 1_000;
+    private static final int MIN_ORDER_AMOUNT_FOR_DISCOUNT = 10_000;
+    private static final int MIN_ORDER_AMOUNT_FOR_GIFT = 120_000;
+    private static final int D_DAY_DISCOUNT_END_DAY = 25;
+    private static final int DEFAULT_DISCOUNT = 0;
 
     private final Calendar visitDate;
     private final Menu menus;
 
-    private int dDayDiscount = 0;
-    private int weekdayDiscount = 0;
-    private int weekendDiscount = 0;
-    private int specialDiscount = 0;
+    private int dDayDiscount = DEFAULT_DISCOUNT;
+    private int weekdayDiscount = DEFAULT_DISCOUNT;
+    private int weekendDiscount = DEFAULT_DISCOUNT;
+    private int specialDiscount = DEFAULT_DISCOUNT;
     private Badge badge = null;
     private Boolean giftEvent = false;
 
@@ -28,10 +35,10 @@ public class Benefit {
         calculateWeekdayDiscount();
         calculateWeekendDiscount();
         calculateSpecialDiscount();
-        if (menus.calculateTotalOrderAmount() < 10000) {
+        if (menus.calculateTotalOrderAmount() < MIN_ORDER_AMOUNT_FOR_DISCOUNT) {
             resetDiscount();
         }
-        if (menus.calculateTotalOrderAmount() >= 120000) {
+        if (menus.calculateTotalOrderAmount() >= MIN_ORDER_AMOUNT_FOR_GIFT) {
             giftEvent = true;
         }
         badge = Badge.getBadgeByAmount(getTotalBenefitAmount());
@@ -74,16 +81,16 @@ public class Benefit {
     }
 
     private void resetDiscount() {
-        dDayDiscount = 0;
-        weekdayDiscount = 0;
-        weekendDiscount = 0;
-        specialDiscount = 0;
+        dDayDiscount = DEFAULT_DISCOUNT;
+        weekdayDiscount = DEFAULT_DISCOUNT;
+        weekendDiscount = DEFAULT_DISCOUNT;
+        specialDiscount = DEFAULT_DISCOUNT;
         giftEvent = false;
     }
 
     private void calculateDDayDiscount() {
-        if (visitDate.getDay() <= 25) {
-            dDayDiscount = 1000 + (visitDate.getDay() - 1) * 100;
+        if (visitDate.getDay() <= D_DAY_DISCOUNT_END_DAY) {
+            dDayDiscount = D_DAY_DISCOUNT_START + (visitDate.getDay() - 1) * D_DAY_DISCOUNT_INCREMENT;
         }
     }
 
@@ -103,7 +110,7 @@ public class Benefit {
 
     private void calculateSpecialDiscount() {
         if (visitDate.isSpecialDiscountDay()) {
-            specialDiscount = 1000;
+            specialDiscount = SPECIAL_DISCOUNT;
         }
     }
 
