@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class Validator {
     private static final int MIN_DATE = 1;
+    private static final int MAX_DATE = 31;
     private static final int MIN_MENU_QUANTITY = 1;
     private static final int MAX_TOTAL_ORDER_QUANTITY = 20;
 
@@ -18,7 +19,7 @@ public class Validator {
         try {
             int date = Integer.parseInt(input);
 
-            if (date < MIN_DATE) {
+            if (date < MIN_DATE || date > MAX_DATE) {
                 throw new IllegalArgumentException(ErrorMessage.INVALID_DATE.getMessage());
             }
         } catch (NumberFormatException e) {
