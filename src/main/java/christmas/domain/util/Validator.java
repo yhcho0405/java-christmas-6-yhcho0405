@@ -95,7 +95,7 @@ public class Validator {
         }
 
         if (totalQuantity > MAX_TOTAL_ORDER_QUANTITY) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
+            throw new IllegalArgumentException(ErrorMessage.OVER_MAX_ORDER.getMessage());
         }
     }
 
@@ -104,7 +104,7 @@ public class Validator {
                 .anyMatch(menu -> menu.getCategory() != MenuBoard.Category.BEVERAGE);
 
         if (!nonBeverageOrderExists) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
+            throw new IllegalArgumentException(ErrorMessage.ONLY_BEVERAGE.getMessage());
         }
     }
 }
