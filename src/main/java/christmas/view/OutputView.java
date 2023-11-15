@@ -34,7 +34,7 @@ public class OutputView {
                 createMenuOrderMessage(menus),
                 String.format(Message.NUMBER_FORMAT.getMessage(), menus.calculateTotalOrderAmount()),
                 createGiftMenuMessage(benefit),
-                createBenefitSummaryMessage(benefit),
+                createBenefitMessage(benefit),
                 String.format(Message.NUMBER_FORMAT.getMessage(), -benefit.getTotalBenefitAmount()),
                 String.format(Message.NUMBER_FORMAT.getMessage(),
                         menus.calculateTotalOrderAmount() - benefit.getTotalDiscount()),
@@ -66,7 +66,7 @@ public class OutputView {
         }
     }
 
-    private static String createBenefitSummaryMessage(Benefit benefit) {
+    private static String createBenefitMessage(Benefit benefit) {
         StringBuilder summary = new StringBuilder();
         addDiscountLine(summary, Message.D_DAY_DISCOUNT_LABEL.getMessage(), benefit.getDDayDiscount());
         addDiscountLine(summary, Message.WEEKDAY_DISCOUNT_LABEL.getMessage(), benefit.getWeekdayDiscount());

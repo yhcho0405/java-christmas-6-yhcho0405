@@ -35,13 +35,11 @@ public class Benefit {
         calculateWeekdayDiscount();
         calculateWeekendDiscount();
         calculateSpecialDiscount();
-        if (menus.calculateTotalOrderAmount() < MIN_ORDER_AMOUNT_FOR_DISCOUNT) {
-            resetDiscount();
-        }
-        if (menus.calculateTotalOrderAmount() >= MIN_ORDER_AMOUNT_FOR_GIFT) {
-            giftEvent = true;
-        }
-        badge = Badge.getBadgeByAmount(getTotalBenefitAmount());
+
+        checkEligibleForBenefits();
+
+        calculateGiftEvent();
+        calculateBadge();
     }
 
     public int getDDayDiscount() {
@@ -114,5 +112,20 @@ public class Benefit {
         }
     }
 
+    private void checkEligibleForBenefits() {
+        if (menus.calculateTotalOrderAmount() < MIN_ORDER_AMOUNT_FOR_DISCOUNT) {
+            resetDiscount();
+        }
+    }
+
+    private void calculateGiftEvent() {
+        if (menus.calculateTotalOrderAmount() >= MIN_ORDER_AMOUNT_FOR_GIFT) {
+            giftEvent = true;
+        }
+    }
+
+    private void calculateBadge() {
+        badge = Badge.getBadgeByAmount(getTotalBenefitAmount());
+    }
 
 }
